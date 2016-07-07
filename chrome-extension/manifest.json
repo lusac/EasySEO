@@ -1,0 +1,12 @@
+{
+  "manifest_version": 2,
+  "name": "easySEO",
+  "description": "Hackday",
+  "version": "0.1",
+  "background": {
+    "scripts": ["context-menus.js"]
+  },
+  "permissions": [
+    "contextMenus"
+  ]
+}
