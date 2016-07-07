@@ -1,0 +1,20 @@
+{
+  "name": "EasySEO",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node dev/server",
+    "dist": "webpack --config webpack.config.dist.js"
+  },
+  "author": "Lucas Chuairi Cruz",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "publishConfig": {
+    "registry": "http://artifactory.globoi.com/artifactory/api/npm/npm-local"
+  }
+}
