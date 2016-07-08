@@ -39,21 +39,21 @@ EasySEO.searchTopRelated = function (self) {
 
 EasySEO.showGraphic = function (self, term) {
   var iframe = document.getElementById('trends-graphic-iframe'),
-      active = document.getElementsByClassName('active')[0];
+      active = document.getElementsByClassName('active')[0],
+      tr = new this.TopRelated({ term: term });
 
   if (active) {
     active.className = active.className.replace('active', '');
   }
 
   self.className = self.className + ' active';
-  var tr = new this.TopRelated();
-  tr.term = term;
   iframe.src = tr.getTrendsApiUrl(true);
   iframe.className = iframe.className.replace('hide', '');
 };
 
-EasySEO.TopRelated = function () {
-  this.term;
+EasySEO.TopRelated = function (params) {
+  params = params || {};
+  this.term = params.term || null;
 };
 
 EasySEO.createTag = function (term) {
