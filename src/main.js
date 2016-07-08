@@ -56,10 +56,8 @@ function getTrendsApiUrl (term, is_graphic) {
 
   if (synonymous) {
     var terms = term + ',' + synonymous,
-        _export = (is_graphic == true) ? 5 : '3&w=500&h=300';
+        _export = (is_graphic == true) ? 5 : '3&w=500&h=300',
         url = 'http://www.google.com/trends/fetchComponent?hl=pt-BR&q=' + terms + '&cid=TIMESERIES_GRAPH_0&export=' + _export;
-        // url = 'http://www.google.com/trends/fetchComponent?hl=pt-BR&q=apresentar,fazer,executar,efetuar&cid=TIMESERIES_GRAPH_0&export=5&w=500&h=300';
-        // url = 'http://www.google.com/trends/fetchComponent?hl=pt-BR&q=' + term + '&geo=BR&cid=RISING_QUERIES_0_0&export=3';
     return url;
   }
   return '';
