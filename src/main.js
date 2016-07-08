@@ -32,7 +32,7 @@ EasySEO.searchTopRelated = function (instance) {
 
 EasySEO.showGraphic = function (instance, term) {
   var iframe = document.getElementById('trends-graphic-iframe'),
-      active = document.getElementsByClassName('active')[0];
+      active = document.querySelector('#tags .tag.active');
 
   if (active) {
     active.className = active.className.replace('active', '');
