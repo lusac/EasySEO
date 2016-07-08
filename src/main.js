@@ -22,25 +22,25 @@ SYNONYMOUS = {
 
 EasySEO.init = function () {
   google.load('visualization', '1');
-  this.iframe = document.getElementById('trends-graphic-iframe');
 };
 
 EasySEO.searchTopRelated = function (instance) {
   if (instance.value) {
-    new this.TopRelated({ sentence: instance.value}).init();
+    new this.TopRelated({ sentence: instance.value, el: instance }).init();
   }
 };
 
 EasySEO.showGraphic = function (instance, term) {
-  var active = document.getElementsByClassName('active')[0];
+  var iframe = document.getElementById('trends-graphic-iframe'),
+      active = document.getElementsByClassName('active')[0];
 
   if (active) {
     active.className = active.className.replace('active', '');
   }
 
   instance.className = instance.className + ' active';
-  this.iframe.src = new this.TopRelated().getTrendsApiUrl(term, true);
-  this.iframe.className = this.iframe.className.replace('hide', '');
+  iframe.src = new this.TopRelated().getTrendsApiUrl(term, true);
+  iframe.className = iframe.className.replace('hide', '');
 };
 
 EasySEO.createTag = function (term) {
@@ -52,16 +52,50 @@ EasySEO.createTag = function (term) {
 EasySEO.TopRelated = function (params) {
   params = params || {};
   this.sentence = params.sentence || null;
+  this.el = params.el || null;
 };
 
 EasySEO.TopRelated.prototype.init = function () {
   var terms = this.getTermsFromSentence();
-  this.cleanLists();
+
+  this.buildElements();
 
   for(var i=0; i<=terms.length-1; i++) {
     this.getTopRelated(terms[i]);
   }
 };
+
+EasySEO.TopRelated.prototype.buildElements = function () {
+  var termsContainer = document.getElementById('terms-container'),
+      tags = document.getElementById('tags'),
+      iframe = document.getElementById('trends-graphic-iframe'),
+      _ulTerms = document.createElement('ul'),
+      _ulTags = document.createElement('ul')
+      _iframe = document.createElement('iframe');
+
+  if (!iframe) {
+    _iframe.id = 'trends-graphic-iframe';
+    _iframe.className = 'hide';
+    _iframe.frameBorder = '0';
+    _iframe.width='540';
+    _iframe.height='340';
+    this.el.parentNode.insertBefore(_iframe, this.el.nextSibling);
+  }
+
+  if (!tags) {
+    _ulTags.id = 'tags';
+    this.el.parentNode.insertBefore(_ulTags, this.el.nextSibling);
+  } else {
+    tags.innerHTML = '';
+  }
+
+  if (!termsContainer) {
+    _ulTerms.id = 'terms-container';
+    this.el.parentNode.insertBefore(_ulTerms, this.el.nextSibling);
+  } else {
+    termsContainer.innerHTML = '';
+  }
+}
 
 EasySEO.TopRelated.prototype.getTopRelated = function (term) {
   var url = this.getTrendsApiUrl(term);
@@ -122,11 +156,6 @@ EasySEO.TopRelated.prototype.getTermsFromSentence = function () {
       punctuationless = newSentence.replace(/[.,\/#!?$%\^&\*;:{}=\-_`~()]/g, '');
       finalSentence = punctuationless.replace(/\s{2,}/g, ' ');
   return finalSentence.split(' ');
-};
-
-EasySEO.TopRelated.prototype.cleanLists = function () {
-  document.getElementById('terms-container').innerHTML = '';
-  document.getElementById('tags').innerHTML = '';
 };
 
 EasySEO.init();
