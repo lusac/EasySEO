@@ -114,7 +114,7 @@ EasySEO.TopRelated.prototype.getTrendsApiUrl = function (term, is_graphic) {
   if (synonymous) {
     var terms = term + ',' + synonymous,
         _export = (is_graphic == true) ? 5 : '3&w=500&h=300',
-        url = 'http://www.google.com/trends/fetchComponent?hl=pt-BR&q=' + terms + '&cid=TIMESERIES_GRAPH_0&export=' + _export;
+        url = 'http://www.google.com/trends/fetchComponent?hl=pt-BR&q=' + terms + '&geo=BR&date=today%2012-m&cid=TIMESERIES_GRAPH_0&export=' + _export;
     return url;
   }
   return '';
