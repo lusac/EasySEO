@@ -25,18 +25,20 @@ EasySEO.init = function () {
   this.iframe = document.getElementById('trends-graphic-iframe');
 };
 
-EasySEO.searchTopRelated = function (self) {
-  new this.TopRelated({ sentence: self.value}).init();
+EasySEO.searchTopRelated = function (instance) {
+  if (instance.value) {
+    new this.TopRelated({ sentence: instance.value}).init();
+  }
 };
 
-EasySEO.showGraphic = function (self, term) {
+EasySEO.showGraphic = function (instance, term) {
   var active = document.getElementsByClassName('active')[0];
 
   if (active) {
     active.className = active.className.replace('active', '');
   }
 
-  self.className = self.className + ' active';
+  instance.className = instance.className + ' active';
   this.iframe.src = new this.TopRelated().getTrendsApiUrl(term, true);
   this.iframe.className = this.iframe.className.replace('hide', '');
 };
