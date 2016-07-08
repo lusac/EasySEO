@@ -22,48 +22,47 @@ SYNONYMOUS = {
 
 EasySEO.init = function () {
   google.load('visualization', '1');
+  this.iframe = document.getElementById('trends-graphic-iframe');
 };
 
 EasySEO.searchTopRelated = function (self) {
-  var inputValue = self.value,
-      tr = new this.TopRelated(),
-      terms = tr.getTermsFromSentence(inputValue);
-
-  tr.cleanLists();
-
-  for(var i=0; i<=terms.length-1; i++) {
-    tr.term = terms[i];
-    tr.getTopRelated();
-  }
+  new this.TopRelated({ sentence: self.value}).init();
 };
 
 EasySEO.showGraphic = function (self, term) {
-  var iframe = document.getElementById('trends-graphic-iframe'),
-      active = document.getElementsByClassName('active')[0],
-      tr = new this.TopRelated({ term: term });
+  var active = document.getElementsByClassName('active')[0];
 
   if (active) {
     active.className = active.className.replace('active', '');
   }
 
   self.className = self.className + ' active';
-  iframe.src = tr.getTrendsApiUrl(true);
-  iframe.className = iframe.className.replace('hide', '');
-};
-
-EasySEO.TopRelated = function (params) {
-  params = params || {};
-  this.term = params.term || null;
+  this.iframe.src = new this.TopRelated().getTrendsApiUrl(term, true);
+  this.iframe.className = this.iframe.className.replace('hide', '');
 };
 
 EasySEO.createTag = function (term) {
   var tags = document.getElementById('tags'),
-      nodeTemplate = '<li class="tag" data-term="' + term + '" onClick="EasySEO.showGraphic(this, \'' + term + '\')">' + term + '</li>';
+  nodeTemplate = '<li class="tag" data-term="' + term + '" onClick="EasySEO.showGraphic(this, \'' + term + '\')">' + term + '</li>';
   tags.insertAdjacentHTML('beforeend', nodeTemplate);
 };
 
-EasySEO.TopRelated.prototype.getTopRelated = function () {
-  var url = this.getTrendsApiUrl();
+EasySEO.TopRelated = function (params) {
+  params = params || {};
+  this.sentence = params.sentence || null;
+};
+
+EasySEO.TopRelated.prototype.init = function () {
+  var terms = this.getTermsFromSentence();
+  this.cleanLists();
+
+  for(var i=0; i<=terms.length-1; i++) {
+    this.getTopRelated(terms[i]);
+  }
+};
+
+EasySEO.TopRelated.prototype.getTopRelated = function (term) {
+  var url = this.getTrendsApiUrl(term);
 
   if (url) {
     var query = new google.visualization.Query(url);
@@ -71,11 +70,11 @@ EasySEO.TopRelated.prototype.getTopRelated = function () {
   }
 };
 
-EasySEO.TopRelated.prototype.getTrendsApiUrl = function (is_graphic) {
-  var synonymous = this.getTermSynonymous();
+EasySEO.TopRelated.prototype.getTrendsApiUrl = function (term, is_graphic) {
+  var synonymous = this.getTermSynonymous(term);
 
   if (synonymous) {
-    var terms = this.term + ',' + synonymous,
+    var terms = term + ',' + synonymous,
         _export = (is_graphic == true) ? 5 : '3&w=500&h=300',
         url = 'http://www.google.com/trends/fetchComponent?hl=pt-BR&q=' + terms + '&cid=TIMESERIES_GRAPH_0&export=' + _export;
     return url;
@@ -83,9 +82,9 @@ EasySEO.TopRelated.prototype.getTrendsApiUrl = function (is_graphic) {
   return '';
 };
 
-EasySEO.TopRelated.prototype.getTermSynonymous = function () {
+EasySEO.TopRelated.prototype.getTermSynonymous = function (term) {
   try {
-    return SYNONYMOUS[this.term];
+    return SYNONYMOUS[term];
   }
   catch (err) {
     return [];
@@ -116,9 +115,9 @@ EasySEO.TopRelated.prototype.handleQueryResponse = function (response) {
   }
 };
 
-EasySEO.TopRelated.prototype.getTermsFromSentence = function (sentence) {
-  var sentence = sentence.toLowerCase(),
-      punctuationless = sentence.replace(/[.,\/#!?$%\^&\*;:{}=\-_`~()]/g, '');
+EasySEO.TopRelated.prototype.getTermsFromSentence = function () {
+  var newSentence = this.sentence.toLowerCase(),
+      punctuationless = newSentence.replace(/[.,\/#!?$%\^&\*;:{}=\-_`~()]/g, '');
       finalSentence = punctuationless.replace(/\s{2,}/g, ' ');
   return finalSentence.split(' ');
 };
