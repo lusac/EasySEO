@@ -80,6 +80,8 @@ EasySEO.TopRelated.prototype.buildElements = function () {
     _iframe.width='540';
     _iframe.height='340';
     this.el.parentNode.insertBefore(_iframe, this.el.nextSibling);
+  } else {
+    iframe.src = '';
   }
 
   if (!tags) {
