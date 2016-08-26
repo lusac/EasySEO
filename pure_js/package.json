@@ -1,7 +1,7 @@
 {
   "name": "EasySEO",
   "version": "0.0.1",
-  "description": "",
+  "description": "Open source javascript plugin to optimize SEO from a given text.",
   "main": "main.js",
   "scripts": {
     "start": "node dev/server",
@@ -13,8 +13,5 @@
   "devDependencies": {
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
-  },
-  "publishConfig": {
-    "registry": "http://artifactory.globoi.com/artifactory/api/npm/npm-local"
   }
 }
