@@ -46,19 +46,20 @@ class EasySEOBuilder extends React.Component {
     });
   }
 
+  cleanSearchState () {
+    this.state.terms = [];
+    this.state.tags = [];
+    this.state.activeTag = null;
+    this.state.iframeAttrs = {
+      src: '',
+      className: ''
+    };
+  }
+
   searchTopRelated (instance) {
     if (instance.value) {
-      this.state.terms = [];
-      this.state.tags = [];
-      this.state.iframeAttrs = {
-        src: '',
-        className: ''
-      };
-      this.sentence = instance.value;
-      this.el = instance;
-      this.infoContainer = document.getElementById('easyseo-id-' + instance.name);
-
-      let terms = this.getTermsFromSentence();
+      this.cleanSearchState();
+      let terms = this.getTermsFromSentence(instance.value);
 
       for(let i=0; i<=terms.length-1; i++) {
         this.getTopRelated(terms[i]);
@@ -66,8 +67,8 @@ class EasySEOBuilder extends React.Component {
     }
   };
 
-  getTermsFromSentence () {
-    let newSentence = this.sentence.toLowerCase(),
+  getTermsFromSentence (sentence) {
+    let newSentence = sentence.toLowerCase(),
         punctuationless = newSentence.replace(/[.,\/#!?$%\^&\*;:{}=\-_`~()]/g, ''),
         finalSentence = punctuationless.replace(/\s{2,}/g, ' ');
     return finalSentence.split(' ');
