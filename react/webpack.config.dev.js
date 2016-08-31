@@ -22,11 +22,32 @@ module.exports = {
   },
 
   module: {
-    loaders: []
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        loaders: [
+          'react-hot',
+          'babel?presets[]=es2015&presets[]=react'
+        ],
+        exclude: /node_modules/
+      },
+      {
+          test: /\.scss$/,
+          loaders: ['style', 'css', 'sass']
+      }
+    ]
+  },
+
+  sassLoader: {
+    includePaths: [path.resolve(__dirname, "dev")]
   },
 
   resolve: {
-    extensions: ['', '.js']
+    modulesDirectories: [
+      'node_modules',
+      'src'
+    ],
+    extensions: ['', '.js', '.jsx']
   },
 
   plugins: [

@@ -6,11 +6,36 @@
   <title>EasySEO React</title>
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <link rel="stylesheet" href="../src/css/style.css" media="screen">
+  <style>
+    label,
+    input {
+      display: block;
+    }
+
+    ul {
+      margin-top: 10px;
+    }
+
+    input[type='text'] {
+      min-width: 50%;
+      padding: 10px;
+      font-size: 15px;
+      border-radius: 2px;
+      border: 2px solid #DDD;
+    }
+  </style>
 </head>
 <body>
-  <h1>EasySEO</h1>
+  <!-- <h1>EasySEO</h1> -->
   <label for="title">Título</label>
-  <input id="title" type="text" name="name" onchange="EasySEO.searchTopRelated(this);">
+  <input id="title" type="text" name="title">
+
   <script src="http://localhost:8080/static/bundle.js"></script>
+
+  <script>
+    window.easyseo = new EasySEO({
+      fields: [document.getElementById('title')]
+    })
+  </script>
 </body>
 </html>
