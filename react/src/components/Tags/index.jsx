@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import Tag from 'components/Tag'
 import Graphic from 'components/Graphic'
 
 class Tags extends React.Component {
-
   render () {
     let self = this;
     return (
@@ -17,7 +17,7 @@ class Tags extends React.Component {
             }
 
             return (
-              <li key={index} className={cssClasses} data-term={tag} onClick={this.props.handleClick.bind(this)}>{tag}</li>
+              <Tag key={index} className={cssClasses} dataTerm={tag} label={tag} onClick={this.props.handleClick.bind(this)} />
             );
           })}
         </ul>
