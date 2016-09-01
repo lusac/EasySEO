@@ -4,16 +4,38 @@ import Tags from 'components/Tags';
 import Term from 'components/Term';
 
 let SYNONYMOUS = {
-  'como': ['da maneira que', 'do jeito que', 'do modo que', 'que nem', 'tal como', 'tal e qual', 'tanto quanto'],
-  'remover': ['tirar', 'transportar', 'arredar', 'mover', 'levar', 'mudar'],
-  'make': ['maquiagem', 'maquilagem'],
-  'limpar': ['tirar','lavar', 'assear', 'mundificar', 'higienizar', 'varrer', 'ensaboar', 'despoluir', 'espanar', 'escovar', 'esfregar', 'desempoar', 'desempoeirar', 'absterger', 'detergir', 'desencardir', 'desenxovalhar', 'desenodoar', 'desenfarruscar', 'apagar', 'abluir'],
-  'tinta': ['colorante', 'tintura', 'pigmento', 'corante'],
-  'caneta': ['tinteiro'],
-  'aprenda': ['descobrir', 'conhecer', 'estudar', 'assimilar', 'saber', 'perceber', 'entender', 'compreender', 'instruir-se'],
-  'customizar': ['personalizar', 'individualizar', 'individuar', 'particularizar', 'singularizar'],
-  'poucos': ['alguns'],
-  'passos': ['etapas', 'fases', 'pontos', 'estágios', 'estádios']
+  'remover': {
+    def: 'verb',
+    opts: ['tirar', 'transportar', 'arredar', 'mover', 'levar', 'mudar']
+  },
+  'make': {
+    def: 'noun',
+    opts: ['maquiagem', 'maquilagem']
+  },
+  'limpar': {
+    def: 'verb',
+    opts: ['tirar','lavar', 'assear', 'mundificar', 'higienizar', 'varrer', 'ensaboar', 'despoluir', 'espanar', 'escovar', 'esfregar', 'desempoar', 'desempoeirar', 'absterger', 'detergir', 'desencardir', 'desenxovalhar', 'desenodoar', 'desenfarruscar', 'apagar', 'abluir']
+  },
+  'tinta': {
+    def: 'noun',
+    opts: ['colorante', 'tintura', 'pigmento', 'corante']
+  },
+  'caneta': {
+    def: 'noun',
+    opts: ['tinteiro']
+  },
+  'aprenda': {
+    def: 'verb',
+    opts: ['descobrir', 'conhecer', 'estudar', 'assimilar', 'saber', 'perceber', 'entender', 'compreender', 'instruir-se']
+  },
+  'customizar': {
+    def: 'verb',
+    opts: ['personalizar', 'individualizar', 'individuar', 'particularizar', 'singularizar']
+  },
+  'passos': {
+    def: 'noun',
+    opts: ['etapas', 'fases', 'pontos', 'estágios', 'estádios']
+  }
 };
 
 class EasySEOBuilder extends React.Component {
@@ -103,7 +125,7 @@ class EasySEOBuilder extends React.Component {
 
   getTermSynonymous (term) {
     try {
-      return SYNONYMOUS[term];
+      return SYNONYMOUS[term].opts;
     }
     catch (err) {
       return [];
