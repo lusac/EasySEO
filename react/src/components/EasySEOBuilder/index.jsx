@@ -48,7 +48,18 @@ class EasySEOBuilder extends React.Component {
     this.termsId = this.prefixClass + '-terms';
     this.tagsId = this.prefixClass + '-tags';
     this.iframeId = this.prefixClass + '-iframe';
+    this.initSearchVars();
+	}
 
+  bindEvents () {
+    let self = this;
+    this.refer.addEventListener('change', function() {
+      self.searchTopRelated(this);
+    });
+  }
+
+  initSearchVars () {
+    this.betterTerms = [];
     this.state = {
       sentence: '',
       terms: [],
@@ -59,32 +70,15 @@ class EasySEOBuilder extends React.Component {
         className: ''
       }
 		}
-	}
-
-  bindEvents () {
-    let self = this;
-    this.refer.addEventListener('change', function() {
-      self.searchTopRelated(this);
-    });
-  }
-
-  cleanSearchState () {
-    this.state.terms = [];
-    this.state.tags = [];
-    this.state.activeTag = null;
-    this.state.iframeAttrs = {
-      src: '',
-      className: ''
-    };
   }
 
   searchTopRelated (instance) {
     if (instance.value) {
-      this.cleanSearchState();
+      this.initSearchVars();
       let terms = this.getTermsFromSentence(instance.value);
 
       for(let i=0; i<=terms.length-1; i++) {
-        this.getTopRelated(terms[i]);
+        this.getTopRelatedTerm(terms[i]);
       }
     }
   };
@@ -144,7 +138,7 @@ class EasySEOBuilder extends React.Component {
     return '';
   }
 
-  getTopRelated (term) {
+  getTopRelatedTerm (term) {
     let url = this.getTrendsApiUrl(term);
 
     if (url) {
