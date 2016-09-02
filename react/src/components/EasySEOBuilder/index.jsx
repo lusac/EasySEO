@@ -59,8 +59,8 @@ class EasySEOBuilder extends React.Component {
   }
 
   initSearchVars () {
-    this.betterTerms = [];
     this.state = {
+      betterTerms: '',
       sentence: '',
       terms: [],
       tags: [],
@@ -80,6 +80,8 @@ class EasySEOBuilder extends React.Component {
       for(let i=0; i<=terms.length-1; i++) {
         this.getTopRelatedTerm(terms[i]);
       }
+
+      // this.getTopRelatedSentence(instance.value);
     }
   };
 
@@ -90,7 +92,7 @@ class EasySEOBuilder extends React.Component {
     return finalSentence.split(' ');
   }
 
-  handleQueryResponse (response) {
+  getBestTermFromResponse (response) {
     let _terms = response.G.Mf,
         terms = _terms.splice(1, _terms.length-1),
         mainTerm = terms[0].label,
@@ -106,14 +108,45 @@ class EasySEOBuilder extends React.Component {
       }
     }
 
-    if (bestTerm !== 'undefined' && bestTerm !== mainTerm) {
-      this.state.terms.push({bestTerm: bestTerm, mainTerm: mainTerm});
-      this.state.tags.push(mainTerm);
+    return {
+      mainTerm: mainTerm,
+      bestTerm: bestTerm
+    };
+  }
 
+  handleSingleTermQueryResponse (response) {
+    try {
+      let r = this.getBestTermFromResponse(response);
+
+      if (r.bestTerm !== 'undefined' && r.bestTerm !== r.mainTerm) {
+        this.state.terms.push({bestTerm: r.bestTerm, mainTerm: r.mainTerm});
+        this.state.tags.push(r.mainTerm);
+
+        this.setState({
+          terms: this.state.terms,
+          tags: this.state.tags
+        });
+      } else {
+        console.log(r.bestTerm, r.mainTerm);
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
+  handleMultipleTermQueryResponse (response) {
+    try {
+      let r = this.getBestTermFromResponse(response);
       this.setState({
-  			terms: this.state.terms,
-        tags: this.state.tags
-  		});
+        betterTerms: r.bestTerm
+      });
+    }
+    catch (err) {
+      this.setState({
+        betterTerms: ''
+      });
+      console.log(err);
     }
   }
 
@@ -126,14 +159,17 @@ class EasySEOBuilder extends React.Component {
     }
   }
 
+  buildTrendsApiUrl (terms, _export) {
+    return 'http://www.google.com/trends/fetchComponent?hl=pt-BR&q=' + terms + '&geo=BR&date=today%2012-m&cid=TIMESERIES_GRAPH_0&export=' + _export;
+  }
+
   getTrendsApiUrl (term, is_graphic) {
     let synonymous = this.getTermSynonymous(term);
 
-    if (synonymous) {
+    if (synonymous.length) {
       let terms = term + ',' + synonymous,
-          _export = (is_graphic == true) ? 5 : '3&w=500&h=300',
-          url = 'http://www.google.com/trends/fetchComponent?hl=pt-BR&q=' + terms + '&geo=BR&date=today%2012-m&cid=TIMESERIES_GRAPH_0&export=' + _export;
-      return url;
+          _export = (is_graphic == true) ? '5&w=500&h=300' : '3';
+      return this.buildTrendsApiUrl(terms, _export);
     }
     return '';
   }
@@ -142,9 +178,43 @@ class EasySEOBuilder extends React.Component {
     let url = this.getTrendsApiUrl(term);
 
     if (url) {
-      let query = new google.visualization.Query(url);
-      query.send(this.handleQueryResponse.bind(this));
+      this.sendGoogleQuery(url);
     }
+  }
+
+  sendGoogleQuery (url, callback) {
+    let _callback = callback || this.handleSingleTermQueryResponse;
+    let query = new google.visualization.Query(url);
+    query.send(_callback.bind(this));
+  }
+
+  getTopRelatedSentence (sentence) {
+    let self = this;
+    let newSentence = sentence;
+
+    setTimeout(function() {
+      for(let i=0; i<=self.state.terms.length - 1; i++) {
+        let term = self.state.terms[i].mainTerm;
+
+        if (SYNONYMOUS[term].def == 'noun') {
+          var bTNoun = self.state.terms[i].bestTerm;
+        }
+
+        if (SYNONYMOUS[term].def == 'verb') {
+          var mTVerb = self.state.terms[i].mainTerm;
+        }
+      }
+
+      let ss = self.getTermSynonymous(mTVerb),
+          ls = [];
+
+      for(let i=0; i<=ss.length-1; i++) {
+        ls.push(ss[i] + '%20' + bTNoun);
+      }
+
+      let url = self.buildTrendsApiUrl(ls.join(','), 3);
+      self.sendGoogleQuery(url, self.handleMultipleTermQueryResponse);
+    }, 2000);
   }
 
   showGraphic (event) {
@@ -163,6 +233,7 @@ class EasySEOBuilder extends React.Component {
     return (
       <span>
         <Term id={this.termsId} terms={this.state.terms} />
+        <p>{this.state.betterTerms}</p>
         <Tags id={this.tagsId} iframeId={this.iframeId} iframeAttrs={this.state.iframeAttrs} tags={this.state.tags} activeTag={this.state.activeTag} handleClick={this.showGraphic.bind(this)} />
       </span>
     );
