@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div id="target">
+      <p><input id="input" type="text" value="Lorem ipsum dolor sit amet, consectetur adipiscing elit"></p>
+    </div>
+    <hr />
+    <div id="container">
+        <div id="div" contenteditable="true"></div>
+        <textarea id="textarea">Lorem ipsum dolor sit amet, consectetur adipiscing elit</textarea>
+    </div>
+    <style media="screen">
+        .highlight {
+          border-bottom: 3px solid red;
+        }
+
+        #input {
+          width: 100%;
+          font-size: 1em;
+        }
+
+        #container {
+          overflow: hidden;
+          position: relative;
+        }
+
+        #div, #textarea {
+          overflow: hidden;
+          font-family: sans-serif;
+          width: 100%;
+          font-size: 1rem;
+          line-height: 1.4;
+          box-sizing: border-box;
+          border: 0;
+          padding: 0;
+          outline: none;
+        }
+
+        #div {
+          color: rgba(0, 0, 0, .25);
+        }
+
+        #textarea {
+          background: transparent;
+          color: black;
+          position: absolute;
+          bottom: 0;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+        }
+    </style>
+
+    <script type="text/javascript">
+    var terms = {
+            'ipsum': ['Ipsum', 'iPsum'],
+            'sit': ['Sit', 'sIt']
+        },
+        keys = ['ipsum', 'sit'];
+
+    // setup
+    var target = document.getElementById('target'),
+        input = document.getElementById('input'),
+        container = document.getElementById('container'),
+        div = document.getElementById('div'),
+        textarea = document.getElementById('textarea');
+
+    function handleKeyUp(e) {
+      switch(e.code) {
+        case 'Escape': return _escKey();
+      }
+
+      var divCSS = window.getComputedStyle(div);
+
+      div.innerHTML = textarea.value.replace(/(\r\n|\r|\n)/g, '<br />');
+      textarea.style.height = divCSS.getPropertyValue('height');
+    }
+
+    function _escKey(e) {
+      var terms = textarea.value.split(' ');
+
+      for (var i=0, len=terms.length; i < len; i++) {
+        if (keys.includes(terms[i])) {
+          terms[i] = ['<span class="highlight">', terms[i], '</span>'].join('');
+        }
+      }
+
+      div.innerHTML = terms.join(' ');
+    }
+
+    textarea.addEventListener('keyup', handleKeyUp, false);
+    </script>
+  </body>
+</html>
