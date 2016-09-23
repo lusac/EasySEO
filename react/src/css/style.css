@@ -1,22 +1,121 @@
-.easyseo__tag {
-  cursor: pointer;
-  font-size: 14px;
-  list-style: none;
-  padding: 5px 10px;
-  margin-right: 5px;
-  border-radius: 3px;
-  font-family: Arial;
-  display: inline-block;
-  border: 1px solid #DDD;
-  vertical-align: middle;
-  box-shadow: 0px -1px 1px rgba(0,0,0,.2) inset;
-}
-
-.easyseo__tag.active {
-  box-shadow: none;
+.easyseo__el-highlight {
   background: #EEE;
+  border-radius: 2px;
+  border-bottom: 2px solid rgb(41, 147, 225);
 }
 
-/*.hide {
-  opacity: 0;
-}*/
+.easyseo__el-container {
+  overflow: hidden;
+  position: relative;
+}
+
+.easyseo__el-text {
+  position: relative;
+  background: transparent;
+}
+
+.easyseo__el-mirror {
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 0 !important;
+  color: transparent !important;
+  position: absolute !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.easyseo__tooltip {
+  top: 100px;
+  left: 0;
+  width: 400px;
+  display: block;
+  position: absolute;
+  border-radius: 2px;
+  background-color: #FFF;
+  padding: 40px 32px 25px 24px;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);
+}
+
+.easyseo__tooltip:after {
+  content: '';
+  top: -2px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  display: block;
+  background: #FFF;
+  position: absolute;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  transform: rotate(45deg) translate(-50%, 0);
+  -moz-transform: rotate(45deg) translate(-50%, 0);
+  -webkit-transform: rotate(45deg) translate(-50%, 0);
+}
+
+.easyseo__tooltip-title,
+.easyseo__tooltip-subtitle,
+.easyseo__tooltip-details,
+.easyseo__tooltip-info {
+  font-family: OpenSans;
+}
+
+.easyseo__tooltip-title {
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+}
+
+.easyseo__tooltip-subtitle {
+  color: #999;
+  font-size: 14px;
+  line-height: 1.43;
+  margin-bottom: 35px;
+  letter-spacing: -0.3px;
+}
+
+.easyseo__tooltip-info {
+  color: #666;
+  display: block;
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 70px;
+  letter-spacing: -0.5px;
+}
+
+.easyseo__tooltip-info-term {
+  display: block;
+  cursor: pointer;
+  margin-top: 14px;
+  margin-left: 24px;
+}
+
+.easyseo__tooltip-info-term:first-child {
+  margin-top: 0;
+}
+
+.easyseo__tooltip-info a {
+  color: #0669de;
+}
+
+.easyseo__tooltip-details {
+  float: right;
+  color: #333;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1.33;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.easyseo__tooltip-close {
+  top: 0;
+  right: 0;
+  color: #999;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 12px 14px;
+  position: absolute;
+}

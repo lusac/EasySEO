@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import Tags from 'components/Tags';
-import Term from 'components/Term';
+import Tooltip from 'components/Tooltip';
 
 let SYNONYMOUS = {
   'remover': {
@@ -43,45 +42,49 @@ class EasySEOBuilder extends React.Component {
   constructor (props) {
 		super(props);
     this.refer = props.refer;
-    this.bindEvents();
     this.prefixClass = 'easyseo-id-' + this.props.refer.name;
+    this.containerId = this.prefixClass + '-container';
     this.termsId = this.prefixClass + '-terms';
-    this.tagsId = this.prefixClass + '-tags';
     this.iframeId = this.prefixClass + '-iframe';
     this.initSearchVars();
+    this.bindEvents();
 	}
+
+  initSearchVars () {
+    this.state = {
+      sentence: '',
+      terms: [],
+      tooltip: {}
+		}
+  }
+
+  emptyState () {
+    this.state.sentece = '';
+    this.state.terms = [];
+  }
 
   bindEvents () {
     let self = this;
     this.refer.addEventListener('change', function() {
       self.searchTopRelated(this);
     });
-  }
 
-  initSearchVars () {
-    this.state = {
-      betterTerms: '',
-      sentence: '',
-      terms: [],
-      tags: [],
-      activeTag: null,
-      iframeAttrs: {
-        src: '',
-        className: ''
-      }
-		}
+    this.refer.addEventListener('keyup', function() {
+      self.setState({
+        sentence: this.value
+      });
+    }, false);
   }
 
   searchTopRelated (instance) {
     if (instance.value) {
-      this.initSearchVars();
-      let terms = this.getTermsFromSentence(instance.value);
+      this.emptyState();
+      this.state.sentence = instance.value;
+      let terms = this.getTermsFromSentence(this.state.sentence);
 
       for(let i=0; i<=terms.length-1; i++) {
         this.getTopRelatedTerm(terms[i]);
       }
-
-      // this.getTopRelatedSentence(instance.value);
     }
   };
 
@@ -92,75 +95,12 @@ class EasySEOBuilder extends React.Component {
     return finalSentence.split(' ');
   }
 
-  getBestTermFromResponse (response) {
-    let _terms = response.G.Mf,
-        terms = _terms.splice(1, _terms.length-1),
-        mainTerm = terms[0].label,
-        _termsPontuation = response.G.Nf,
-        termsPontuation = _termsPontuation[_termsPontuation.length-1].c,
-        bestPontuation = 0,
-        bestTerm;
+  getTopRelatedTerm (term) {
+    let url = this.getTrendsApiUrl(term);
 
-    for (let i=1; i<=termsPontuation.length-1; i++) {
-      if (termsPontuation[i].v > bestPontuation) {
-        bestTerm = terms[i-1].label;
-        bestPontuation = termsPontuation[i].v;
-      }
+    if (url) {
+      this.sendGoogleQuery(url);
     }
-
-    return {
-      mainTerm: mainTerm,
-      bestTerm: bestTerm
-    };
-  }
-
-  handleSingleTermQueryResponse (response) {
-    try {
-      let r = this.getBestTermFromResponse(response);
-
-      if (r.bestTerm !== 'undefined' && r.bestTerm !== r.mainTerm) {
-        this.state.terms.push({bestTerm: r.bestTerm, mainTerm: r.mainTerm});
-        this.state.tags.push(r.mainTerm);
-
-        this.setState({
-          terms: this.state.terms,
-          tags: this.state.tags
-        });
-      } else {
-        console.log(r.bestTerm, r.mainTerm);
-      }
-    }
-    catch (err) {
-      console.log(err);
-    }
-  }
-
-  handleMultipleTermQueryResponse (response) {
-    try {
-      let r = this.getBestTermFromResponse(response);
-      this.setState({
-        betterTerms: r.bestTerm
-      });
-    }
-    catch (err) {
-      this.setState({
-        betterTerms: ''
-      });
-      console.log(err);
-    }
-  }
-
-  getTermSynonymous (term) {
-    try {
-      return SYNONYMOUS[term].opts;
-    }
-    catch (err) {
-      return [];
-    }
-  }
-
-  buildTrendsApiUrl (terms, _export) {
-    return 'http://www.google.com/trends/fetchComponent?hl=pt-BR&q=' + terms + '&geo=BR&date=today%2012-m&cid=TIMESERIES_GRAPH_0&export=' + _export;
   }
 
   getTrendsApiUrl (term, is_graphic) {
@@ -174,11 +114,12 @@ class EasySEOBuilder extends React.Component {
     return '';
   }
 
-  getTopRelatedTerm (term) {
-    let url = this.getTrendsApiUrl(term);
-
-    if (url) {
-      this.sendGoogleQuery(url);
+  getTermSynonymous (term) {
+    try {
+      return SYNONYMOUS[term].opts;
+    }
+    catch (err) {
+      return [];
     }
   }
 
@@ -188,53 +129,140 @@ class EasySEOBuilder extends React.Component {
     query.send(_callback.bind(this));
   }
 
-  getTopRelatedSentence (sentence) {
-    let self = this;
-    let newSentence = sentence;
+  getTermsPontuationFromResponse (response) {
+    let _terms = response.G.Mf,
+        terms = _terms.splice(1, _terms.length-1),
+        mainTerm = terms[0].label,
+        _termsPontuation = response.G.Nf,
+        termsPontuation = _termsPontuation[_termsPontuation.length-1].c,
+        termsList = [];
 
-    setTimeout(function() {
-      for(let i=0; i<=self.state.terms.length - 1; i++) {
-        let term = self.state.terms[i].mainTerm;
+    for (let i=1; i<=terms.length-1; i++) {
+      termsList.push({
+        label: terms[i-1].label,
+        value: termsPontuation[i].v
+      });
+    }
 
-        if (SYNONYMOUS[term].def == 'noun') {
-          var bTNoun = self.state.terms[i].bestTerm;
-        }
+    // Sort highest to lowest
+    termsList.sort(function(a, b) {
+      return b.value - a.value;
+    });
 
-        if (SYNONYMOUS[term].def == 'verb') {
-          var mTVerb = self.state.terms[i].mainTerm;
-        }
-      }
-
-      let ss = self.getTermSynonymous(mTVerb),
-          ls = [];
-
-      for(let i=0; i<=ss.length-1; i++) {
-        ls.push(ss[i] + '%20' + bTNoun);
-      }
-
-      let url = self.buildTrendsApiUrl(ls.join(','), 3);
-      self.sendGoogleQuery(url, self.handleMultipleTermQueryResponse);
-    }, 2000);
+    return {
+      main: mainTerm,
+      all: termsList
+    };
   }
 
-  showGraphic (event) {
-    let instance = event.currentTarget;
+  handleSingleTermQueryResponse (response) {
+    try {
+      this.state.terms.push(this.getTermsPontuationFromResponse(response));
+      this.setState({
+        terms: this.state.terms
+      });
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
+  buildTrendsApiUrl (terms, _export) {
+    return 'http://www.google.com/trends/fetchComponent?hl=pt-BR&q=' + terms + '&geo=BR&date=today%2012-m&cid=TIMESERIES_GRAPH_0&export=' + _export;
+  }
+
+  getHighlightedSentence () {
+    let resp = {__html:''};
+    if (this.state.sentence.length > 0) {
+      let self = this;
+      let changeList = [];
+      let sentenceTerms = this.state.sentence.split(' ');
+
+      for (var i=0; i <= this.state.terms.length-1; i++) {
+        changeList.push(this.state.terms[i].main);
+      }
+
+      // return (
+      //   <span>
+      //     {sentenceTerms.map((term, i) => {
+      //       if (changeList.includes(term)) {
+      //         return (
+      //           <span className='easyseo__el-highlight' key={i}>{term}</span>
+      //         )
+      //       }
+      //       else {
+      //         return (<span key={i}> {term} </span>)
+      //       }
+      //     })};
+      //   </span>
+      // )
+
+      for (var i=0, len=sentenceTerms.length; i < len; i++) {
+        if (changeList.includes(sentenceTerms[i])) {
+          sentenceTerms[i] = ['<span class="easyseo__el-highlight">', sentenceTerms[i], '</span>'].join('');
+        }
+      }
+      resp.__html = sentenceTerms.join(' ');
+    }
+    return resp;
+  }
+
+  showTooltip (el) {
+    let term = el.textContent;
+    let tooltipTerm;
+
+    for(let i=0; i<=this.state.terms.length-1; i++) {
+      if (this.state.terms[i].main == term) {
+        tooltipTerm = this.state.terms[i];
+        break;
+      }
+    }
 
     this.setState({
-      activeTag: instance,
-      iframeAttrs: {
-        src: this.getTrendsApiUrl(instance.textContent, true),
-        className: ''
+      tooltip: {
+        isHidden: false,
+        terms: tooltipTerm
       }
-    })
+    });
+  }
+
+  componentDidMount () {
+    let self = this;
+
+    // set className to refer element
+    document.getElementById(this.containerId).appendChild(this.refer);
+    this.refer.className = this.refer.className + ' easyseo__el-text';
+
+    // Copy css from brother element
+    this.mirrorElement = document.querySelector('#' + this.containerId + ' .easyseo__el-mirror');
+    this.mirrorElement.style.cssText =  document.defaultView.getComputedStyle(this.refer, '').cssText;
+
+    // Add Click Events to refer
+    this.refer.addEventListener('click', function (e) {
+      let clickX = e.clientX;
+      let clickY = e.clientY;
+      let highlights = document.getElementsByClassName('easyseo__el-highlight');
+
+      for(let i=0; i<=highlights.length-1; i++) {
+        let el = highlights[i];
+        let rect = el.getBoundingClientRect();
+
+        if (clickX >= rect.left && clickX <= rect.right) {
+          if (clickY >= rect.top && clickY <= rect.bottom) {
+            self.showTooltip(el);
+          }
+        }
+      }
+    });
   }
 
   render () {
     return (
       <span>
-        <Term id={this.termsId} terms={this.state.terms} />
-        <p>{this.state.betterTerms}</p>
-        <Tags id={this.tagsId} iframeId={this.iframeId} iframeAttrs={this.state.iframeAttrs} tags={this.state.tags} activeTag={this.state.activeTag} handleClick={this.showGraphic.bind(this)} />
+        <div id={this.containerId} className={'easyseo__el-container'}>
+          <div className={'easyseo__el-mirror'} contentEditable={true} dangerouslySetInnerHTML={this.getHighlightedSentence()} />
+        </div>
+        <Tooltip params={this.state.tooltip} />
       </span>
     );
   }
