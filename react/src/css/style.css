@@ -26,13 +26,13 @@
 }
 
 .easyseo__tooltip {
-  top: 100px;
-  left: 0;
+  z-index: 0;
   width: 400px;
   display: block;
   position: absolute;
   border-radius: 2px;
   background-color: #FFF;
+  box-sizing: border-box;
   padding: 40px 32px 25px 24px;
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);
 }
@@ -86,6 +86,7 @@
 }
 
 .easyseo__tooltip-info-term {
+  width: 212px;
   display: block;
   cursor: pointer;
   margin-top: 14px;
@@ -118,4 +119,57 @@
   cursor: pointer;
   padding: 12px 14px;
   position: absolute;
+}
+
+.easyseo__tooltip-info-term .main-term,
+.easyseo__tooltip-info-term .other-term {
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 4px 14px;
+  border-radius: 50px;
+  font-family: OpenSans;
+  letter-spacing: -0.5px;
+}
+
+.easyseo__tooltip-info-term .main-term {
+  width: 100%;
+  display: block;
+  position: relative;
+}
+
+.easyseo__tooltip-info-term:hover .main-term {
+  color: #405e80;
+  background-color: #d9ebff;
+}
+
+.easyseo__tooltip-info-term .other-term {
+  top: 0;
+  right: 0;
+  width: 50%;
+  position: absolute;
+}
+
+.easyseo__tooltip-info-term:hover .other-term {
+  color: #fff;
+  background-color: #0669de;
+}
+
+.easyseo__tooltip-info-term .easyseo__arrow-reverse {
+  display: none;
+}
+
+.easyseo__tooltip-info-term:hover .easyseo__arrow-right {
+  display: none;
+}
+
+
+.easyseo__tooltip-info-term:hover .easyseo__arrow-reverse {
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.easyseo__tooltip-info-term .easyseo__arrow-reverse,
+.easyseo__tooltip-info-term .easyseo__arrow-right {
+  margin-right: 40px
 }

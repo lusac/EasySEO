@@ -134,7 +134,7 @@ class EasySEOBuilder extends React.Component {
         terms = _terms.splice(1, _terms.length-1),
         mainTerm = terms[0].label,
         _termsPontuation = response.G.Nf,
-        termsPontuation = _termsPontuation[_termsPontuation.length-1].c,
+        termsPontuation = _termsPontuation[_termsPontuation.length-2].c,
         termsList = [];
 
     for (let i=1; i<=terms.length-1; i++) {
@@ -207,7 +207,7 @@ class EasySEOBuilder extends React.Component {
     return resp;
   }
 
-  showTooltip (el) {
+  showTooltip (el, pos) {
     let term = el.textContent;
     let tooltipTerm;
 
@@ -221,7 +221,11 @@ class EasySEOBuilder extends React.Component {
     this.setState({
       tooltip: {
         isHidden: false,
-        terms: tooltipTerm
+        terms: tooltipTerm,
+        pos: {
+          top: pos.top,
+          left: pos.left
+        }
       }
     });
   }
@@ -249,7 +253,8 @@ class EasySEOBuilder extends React.Component {
 
         if (clickX >= rect.left && clickX <= rect.right) {
           if (clickY >= rect.top && clickY <= rect.bottom) {
-            self.showTooltip(el);
+            self.showTooltip(el, {top: rect.bottom + 10, left: (rect.left + rect.right)/2});
+            break;
           }
         }
       }
