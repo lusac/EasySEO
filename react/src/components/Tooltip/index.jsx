@@ -19,7 +19,11 @@ class Tooltip extends React.Component {
         <span>
           {this.props.params.terms.all.map((term, i) => {
             return (
-              <span className='easyseo__tooltip-info-term' key={i}>
+              <span className='easyseo__tooltip-info-term'
+                    key={i}
+                    data-newterm={term.label}
+                    data-oldterm={this.props.params.terms.main}
+                    onClick={this.props.params.tooltipHandler.bind(this)}>
                 <span className='main-term'>
                   {this.props.params.terms.main}
 

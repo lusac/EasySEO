@@ -220,6 +220,7 @@ class EasySEOBuilder extends React.Component {
 
     this.setState({
       tooltip: {
+        tooltipHandler: this.tooltipHandler.bind(this),
         isHidden: false,
         terms: tooltipTerm,
         pos: {
@@ -259,6 +260,14 @@ class EasySEOBuilder extends React.Component {
         }
       }
     });
+  }
+
+  tooltipHandler (e) {
+    let newSentence = this.state.sentence.replace(e.currentTarget.dataset.oldterm, e.currentTarget.dataset.newterm);
+    this.setState({
+      sentence: newSentence
+    });
+    this.refer.value = newSentence;
   }
 
   render () {
