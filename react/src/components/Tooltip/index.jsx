@@ -23,7 +23,7 @@ class Tooltip extends React.Component {
                     key={i}
                     data-newterm={term.label}
                     data-oldterm={this.props.params.terms.main}
-                    onClick={this.props.params.tooltipHandler.bind(this)}>
+                    onClick={this.changeTerms.bind(this)}>
                 <span className='main-term'>
                   {this.props.params.terms.main}
 
@@ -47,6 +47,11 @@ class Tooltip extends React.Component {
       return el.offsetWidth;
     }
     return 0;
+  }
+
+  changeTerms (e) {
+    this.props.params.tooltipHandler(e);
+    this.closeHandler();
   }
 
   closeHandler() {
