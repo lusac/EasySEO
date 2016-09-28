@@ -73,7 +73,17 @@ class EasySEOBuilder extends React.Component {
       self.setState({
         sentence: this.value
       });
-    }, false);
+    });
+
+    document.getElementsByTagName('html')[0].addEventListener('click', function(e) {
+      if (e.target !== self.refer && !e.target.closest('#easyseo__tooltip')) {
+        let newTooltip = self.state.tooltip;
+        newTooltip.isHidden = true;
+        self.setState({
+          tooltip: newTooltip
+        });
+      }
+    });
   }
 
   searchTopRelated (instance) {
