@@ -49,6 +49,13 @@ class Tooltip extends React.Component {
     return 0;
   }
 
+  closeHandler() {
+    this.props.params.isHidden = true;
+    this.setState({
+      params: this.props.params
+    });
+  }
+
   render () {
     let width = this.getWidth();
     let style = {
@@ -59,7 +66,7 @@ class Tooltip extends React.Component {
 
     return (
       <span id='easyseo__tooltip' className='easyseo__tooltip' style={style}>
-        <span className='easyseo__tooltip-close'>✕</span>
+        <span className='easyseo__tooltip-close' onClick={this.closeHandler.bind(this)}>✕</span>
         <strong className='easyseo__tooltip-title'>Redomendação de SEO</strong>
         <p className='easyseo__tooltip-subtitle'>Substitua as palavras para ganhar mais relevância no Google</p>
         <span className='easyseo__tooltip-info' key={'ola'}>
