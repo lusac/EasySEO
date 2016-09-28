@@ -268,6 +268,7 @@ class EasySEOBuilder extends React.Component {
       sentence: newSentence
     });
     this.refer.value = newSentence;
+    this.refer.dispatchEvent(new Event('change'));
   }
 
   render () {
