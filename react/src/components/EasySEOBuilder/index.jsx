@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import Tooltip from 'components/Tooltip';
+import index from './index.scss';
 
 let SYNONYMOUS = {
   'remover': {

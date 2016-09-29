@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import ArrowRight from 'components/icons/arrow_right';
 import ArrowReverse from 'components/icons/arrow_reverse';
+import index from './index.scss';
 
 class Tooltip extends React.Component {
 
