@@ -4,7 +4,7 @@ module.exports = {
   cache: false,
   context: __dirname + '/src',
   devtool: 'source-map',
-  entry: './main.js',
+  entry: './main.jsx',
   output: {
     path: './dist',
     publicPath: '/dist/',
