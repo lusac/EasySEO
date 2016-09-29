@@ -57,11 +57,19 @@ class Tooltip extends React.Component {
     this.closeHandler();
   }
 
-  closeHandler() {
+  closeHandler () {
     this.props.params.isHidden = true;
     this.setState({
       params: this.props.params
     });
+  }
+
+  getGoogleTrendsUrl () {
+    if (Object.keys(this.props.params.terms).length !== 0) {
+      let terms = this.props.params.terms.all.map(item => item.label).join();
+      return 'https://www.google.com.br/trends/explore?q=' + terms;
+    }
+    return '#';
   }
 
   render () {
@@ -80,7 +88,7 @@ class Tooltip extends React.Component {
         <span className='easyseo__tooltip-info' key={'ola'}>
           {this.renderTerms()}
         </span>
-        <a href='#' className='easyseo__tooltip-details'>ver detalhes</a>
+        <a href={this.getGoogleTrendsUrl()} target='_blank' className='easyseo__tooltip-details'>ver detalhes</a>
       </span>
     );
   }
