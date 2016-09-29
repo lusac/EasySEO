@@ -11,7 +11,6 @@ class Tooltip extends React.Component {
     this.props.params.isHidden = this.props.params.isHidden || true;
     this.props.params.terms = this.props.params.terms || {};
     this.props.params.pos = this.props.params.pos || {top: 0, left: 0};
-    this.width = 0;
   }
 
   renderTerms () {
@@ -73,11 +72,10 @@ class Tooltip extends React.Component {
   }
 
   render () {
-    let width = this.getWidth();
     let style = {
       visibility: this.props.params.isHidden ? 'hidden' : 'visible',
       top: this.props.params.pos.top,
-      left: this.props.params.pos.left - width / 2
+      left: this.props.params.pos.left - this.getWidth() / 2
     };
 
     return (
@@ -85,7 +83,7 @@ class Tooltip extends React.Component {
         <span className='easyseo__tooltip-close' onClick={this.closeHandler.bind(this)}>✕</span>
         <strong className='easyseo__tooltip-title'>Redomendação de SEO</strong>
         <p className='easyseo__tooltip-subtitle'>Substitua as palavras para ganhar mais relevância no Google</p>
-        <span className='easyseo__tooltip-info' key={'ola'}>
+        <span className='easyseo__tooltip-info'>
           {this.renderTerms()}
         </span>
         <a href={this.getGoogleTrendsUrl()} target='_blank' className='easyseo__tooltip-details'>ver detalhes</a>
