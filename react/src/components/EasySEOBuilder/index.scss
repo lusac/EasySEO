@@ -1,26 +1,28 @@
-.easyseo__el-highlight {
-  background: #EEE;
-  border-radius: 2px;
-  border-bottom: 2px solid rgb(41, 147, 225);
-}
+.easyseo__el {
+  &-highlight {
+    background: #EEE;
+    border-radius: 2px;
+    border-bottom: 2px solid rgb(41, 147, 225);
+  }
 
-.easyseo__el-container {
-  overflow: hidden;
-  position: relative;
-}
+  &-container {
+    overflow: hidden;
+    position: relative;
+  }
 
-.easyseo__el-text {
-  position: relative;
-  background: transparent;
-}
+  &-text {
+    position: relative;
+    background: transparent;
+  }
 
-.easyseo__el-mirror {
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  z-index: 0 !important;
-  color: transparent !important;
-  position: absolute !important;
-  -webkit-text-fill-color: transparent !important;
+  &-mirror {
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 0 !important;
+    color: transparent !important;
+    position: absolute !important;
+    -webkit-text-fill-color: transparent !important;
+  }
 }
