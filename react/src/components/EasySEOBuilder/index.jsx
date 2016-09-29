@@ -114,13 +114,12 @@ class EasySEOBuilder extends React.Component {
     }
   }
 
-  getTrendsApiUrl (term, is_graphic) {
+  getTrendsApiUrl (term) {
     let synonymous = this.getTermSynonymous(term);
 
     if (synonymous.length) {
-      let terms = term + ',' + synonymous,
-          _export = (is_graphic == true) ? '5&w=500&h=300' : '3';
-      return this.buildTrendsApiUrl(terms, _export);
+      let terms = term + ',' + synonymous;
+      return this.buildTrendsApiUrl(terms);
     }
     return '';
   }
@@ -135,8 +134,8 @@ class EasySEOBuilder extends React.Component {
   }
 
   sendGoogleQuery (url, callback) {
-    let _callback = callback || this.handleSingleTermQueryResponse;
-    let query = new google.visualization.Query(url);
+    let query = new google.visualization.Query(url),
+        _callback = callback || this.handleSingleTermQueryResponse;
     query.send(_callback.bind(this));
   }
 
@@ -178,16 +177,16 @@ class EasySEOBuilder extends React.Component {
     }
   }
 
-  buildTrendsApiUrl (terms, _export) {
-    return 'http://www.google.com/trends/fetchComponent?hl=pt-BR&q=' + terms + '&geo=BR&date=today%2012-m&cid=TIMESERIES_GRAPH_0&export=' + _export;
+  buildTrendsApiUrl (terms) {
+    return 'http://www.google.com/trends/fetchComponent?hl=pt-BR&q=' + terms + '&geo=BR&date=today%2012-m&cid=TIMESERIES_GRAPH_0&export=3';
   }
 
   getHighlightedSentence () {
     let resp = {__html:''};
     if (this.state.sentence.length > 0) {
-      let self = this;
-      let changeList = [];
-      let sentenceTerms = this.state.sentence.split(' ');
+      let self = this,
+          changeList = [],
+          sentenceTerms = this.state.sentence.split(' ');
 
       for (var i=0; i <= this.state.terms.length-1; i++) {
         changeList.push(this.state.terms[i].main);
@@ -219,8 +218,8 @@ class EasySEOBuilder extends React.Component {
   }
 
   showTooltip (el, pos) {
-    let term = el.textContent;
-    let tooltipTerm;
+    let tooltipTerm,
+        term = el.textContent;
 
     for(let i=0; i<=this.state.terms.length-1; i++) {
       if (this.state.terms[i].main == term) {
