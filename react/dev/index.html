@@ -31,17 +31,23 @@
   </style>
 </head>
 <body>
-  <!-- <h1>EasySEO</h1> -->
   <div id="content">
-    <label for="title">Título</label>
+    <h1>EasySEO</h1>
+    <label for="title">Title</label>
     <input id="title" type="text" name="title">
+    <br><br>
+    <label for="subtitle">Subtitle</label>
+    <input id="subtitle" type="text" name="subtitle">
   </div>
 
   <script src="http://localhost:8080/static/bundle.js"></script>
 
   <script>
     window.easyseo = new EasySEO({
-      fields: [document.getElementById('title')]
+      fields: [
+        document.getElementById('title'),
+        document.getElementById('subtitle')
+      ]
     })
   </script>
 </body>
