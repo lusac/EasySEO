@@ -25,15 +25,14 @@ class Tooltip extends React.Component {
                   data-newterm={term.label}
                   data-oldterm={this.props.params.terms.main}
                   onClick={this.changeTerms.bind(this)}>
-                  <span className='main-term'>
-                    {this.props.params.terms.main}
-
+                    <span className='main-term'>
+                      {this.props.params.terms.main}
+                    </span>
                     <span className='other-term'>
                       <ArrowRight />
                       <ArrowReverse />
                       {term.label}
                     </span>
-                  </span>
                 </span>
               );
             }

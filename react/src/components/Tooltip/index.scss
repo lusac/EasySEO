@@ -1,3 +1,22 @@
+$opensans_bold: 'OpenSans Bold';
+$opensans_regular: 'OpenSans Regular';
+
+@font-face {
+  font-family: $opensans_bold;
+  src:url("http://s.glbimg.com/gl/ba/fonts/opensans-bold-webfont.eot");
+  src:url("http://s.glbimg.com/gl/ba/fonts/opensans-bold-webfont.eot?#iefix") format("embedded-opentype"),url("http://s.glbimg.com/gl/ba/fonts/opensans-bold-webfont.woff") format("woff"),url("http://s.glbimg.com/gl/ba/fonts/opensans-bold-webfont.ttf") format("truetype"),url("http://s.glbimg.com/gl/ba/fonts/opensans-bold-webfont.svg") format("svg");
+  font-weight:normal;
+  font-style:normal
+}
+
+@font-face {
+  font-family: $opensans_regular;
+  src:url("http://s.glbimg.com/gl/ba/fonts/opensans-regular-webfont.eot");
+  src:url("http://s.glbimg.com/gl/ba/fonts/opensans-regular-webfont.eot?#iefix") format("embedded-opentype"),url("http://s.glbimg.com/gl/ba/fonts/opensans-regular-webfont.woff") format("woff"),url("http://s.glbimg.com/gl/ba/fonts/opensans-regular-webfont.ttf") format("truetype"),url("http://s.glbimg.com/gl/ba/fonts/opensans-regular-webfont.svg") format("svg");
+  font-weight:normal;
+  font-style:normal
+}
+
 .easyseo__tooltip {
   z-index: 5;
   width: 400px;
@@ -23,11 +42,14 @@
     transform: rotate(45deg) translate(-50%, 0);
   }
 
-  &-title,
   &-subtitle,
-  &-details,
   &-info {
-    font-family: OpenSans;
+    font-family: $opensans_regular;
+  }
+
+  &-title,
+  &-details {
+    font-family: $opensans_bold;
   }
 
   &-title {
@@ -42,7 +64,7 @@
     color: #999;
     font-size: 14px;
     line-height: 1.43;
-    margin-bottom: 35px;
+    margin-bottom: 32px;
     letter-spacing: -0.3px;
   }
 
@@ -51,7 +73,7 @@
     display: block;
     font-size: 16px;
     line-height: 1.5;
-    margin-bottom: 70px;
+    margin-bottom: 66px;
     letter-spacing: -0.5px;
 
     a {
@@ -60,20 +82,21 @@
   }
 
   &-info-term {
-    width: 212px;
-    display: block;
     cursor: pointer;
     margin-top: 14px;
     margin-left: 24px;
+    border-radius: 20px;
+    display: inline-block;
 
     &:first-child {
       margin-top: 0;
     }
 
     &:hover {
+      background-color: #d9ebff;
+
       .main-term {
         color: #405e80;
-        background-color: #d9ebff;
       }
 
       .other-term {
@@ -92,32 +115,24 @@
       }
     }
 
+    .other-term {
+      margin-left: 2px;
+    }
+
     .main-term,
     .other-term {
       font-size: 16px;
       line-height: 1.5;
       padding: 4px 14px;
       border-radius: 50px;
+      display: inline-block;
       font-family: OpenSans;
       letter-spacing: -0.5px;
     }
 
-    .main-term {
-      width: 100%;
-      display: block;
-      position: relative;
-    }
-
-    .other-term {
-      top: 0;
-      right: 0;
-      width: 50%;
-      position: absolute;
-    }
-
-    .easyseo__arrow-reverse,
-    .easyseo__arrow-right {
-      margin-right: 40px
+    .easyseo__arrow-right,
+    .easyseo__arrow-reverse {
+      margin-right: 30px
     }
 
     .easyseo__arrow-reverse {
