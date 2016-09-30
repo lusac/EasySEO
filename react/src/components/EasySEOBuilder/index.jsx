@@ -3,46 +3,24 @@ import ReactDom from 'react-dom';
 import Tooltip from 'components/Tooltip';
 import index from './index.scss';
 
-let SYNONYMOUS = {
-  'remover': {
-    def: 'verb',
-    opts: ['tirar', 'transportar', 'arredar', 'mover', 'levar', 'mudar']
-  },
-  'make': {
-    def: 'noun',
-    opts: ['maquiagem', 'maquilagem']
-  },
-  'limpar': {
-    def: 'verb',
-    opts: ['tirar','lavar', 'assear', 'mundificar', 'higienizar', 'varrer', 'ensaboar', 'despoluir', 'espanar', 'escovar', 'esfregar', 'desempoar', 'desempoeirar', 'absterger', 'detergir', 'desencardir', 'desenxovalhar', 'desenodoar', 'desenfarruscar', 'apagar', 'abluir']
-  },
-  'tinta': {
-    def: 'noun',
-    opts: ['colorante', 'tintura', 'pigmento', 'corante']
-  },
-  'caneta': {
-    def: 'noun',
-    opts: ['tinteiro']
-  },
-  'aprenda': {
-    def: 'verb',
-    opts: ['descobrir', 'conhecer', 'estudar', 'assimilar', 'saber', 'perceber', 'entender', 'compreender', 'instruir-se']
-  },
-  'customizar': {
-    def: 'verb',
-    opts: ['personalizar', 'individualizar', 'individuar', 'particularizar', 'singularizar']
-  },
-  'passos': {
-    def: 'noun',
-    opts: ['etapas', 'fases', 'pontos', 'estágios', 'estádios']
-  }
+let SYNONYMS = {
+  'remover': ['tirar', 'transportar', 'arredar', 'mover', 'levar', 'mudar'],
+  'make': ['maquiagem', 'maquilagem'],
+  'limpar': ['tirar','lavar', 'assear', 'mundificar', 'higienizar', 'varrer', 'ensaboar', 'despoluir', 'espanar', 'escovar', 'esfregar', 'desempoar', 'desempoeirar', 'absterger', 'detergir', 'desencardir', 'desenxovalhar', 'desenodoar', 'desenfarruscar', 'apagar', 'abluir'],
+  'tinta': ['colorante', 'tintura', 'pigmento', 'corante'],
+  'caneta': ['tinteiro'],
+  'aprenda': ['descobrir', 'conhecer', 'estudar', 'assimilar', 'saber', 'perceber', 'entender', 'compreender', 'instruir-se'],
+  'customizar': ['personalizar', 'individualizar', 'individuar', 'particularizar', 'singularizar'],
+  'passos': ['etapas', 'fases', 'pontos', 'estágios', 'estádios']
 };
 
 class EasySEOBuilder extends React.Component {
 
   constructor (props) {
 		super(props);
+    this.synonyms = SYNONYMS;
     this.refer = props.refer;
+    this.synonymsApiHost = props.synonymsApiHost;
     this.prefixClass = 'easyseo-id-' + this.props.refer.name;
     this.containerId = this.prefixClass + '-container';
     this.termsId = this.prefixClass + '-terms';
@@ -92,12 +70,34 @@ class EasySEOBuilder extends React.Component {
       this.emptyState();
       this.state.sentence = instance.value;
       let terms = this.getTermsFromSentence(this.state.sentence);
-
-      for(let i=0; i<=terms.length-1; i++) {
-        this.getTopRelatedTerm(terms[i]);
+      if (this.synonymsApiHost) {
+        this.getSynonymsFromApi(terms)
+      } else {
+        this.getTopRelatedTermFromTerms(terms);
       }
     }
   };
+
+  getSynonymsFromApi (terms) {
+    let self = this,
+        xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        self.synonyms = JSON.parse(this.responseText);
+        self.getTopRelatedTermFromTerms(terms)
+      }
+    };
+    xhttp.open('GET', this.synonymsApiHost + terms.join(), true);
+    // xhttp.setRequestHeader('Authorization', 'Bearer ' + '6N+3bqgPkdwj4CtN1c7ffbtTW3mdW4Lc1elLV9lrle5bJ0EQzYgOiPFejpRLWVpjK8SZ7dGG761OJ+TwhKd1hw==');
+    xhttp.send();
+  };
+
+  getTopRelatedTermFromTerms (terms) {
+    for(let i=0; i<=terms.length-1; i++) {
+      this.getTopRelatedTerm(terms[i]);
+    }
+  }
 
   getTermsFromSentence (sentence) {
     let newSentence = sentence.toLowerCase(),
@@ -115,28 +115,39 @@ class EasySEOBuilder extends React.Component {
   }
 
   getTrendsApiUrl (term) {
-    let synonymous = this.getTermSynonymous(term);
+    let synonyms = this.getTermSynonyms(term);
 
-    if (synonymous.length) {
-      let terms = term + ',' + synonymous;
+    if (synonyms && synonyms.length) {
+      let terms = term + ',' + synonyms;
       return this.buildTrendsApiUrl(terms);
     }
     return '';
   }
 
-  getTermSynonymous (term) {
+  getTermSynonyms (term) {
     try {
-      return SYNONYMOUS[term].opts;
+      return this.synonyms[term];
     }
     catch (err) {
       return [];
     }
   }
 
-  sendGoogleQuery (url, callback) {
-    let query = new google.visualization.Query(url),
-        _callback = callback || this.handleSingleTermQueryResponse;
-    query.send(_callback.bind(this));
+  sendGoogleQuery (url) {
+    let query = new google.visualization.Query(url);
+    query.send(this.handleSingleTermQueryResponse.bind(this));
+  }
+
+  handleSingleTermQueryResponse (response) {
+    try {
+      this.state.terms.push(this.getTermsPontuationFromResponse(response));
+      this.setState({
+        terms: this.state.terms
+      });
+    }
+    catch (err) {
+      console.log(err);
+    }
   }
 
   getTermsPontuationFromResponse (response) {
@@ -144,12 +155,12 @@ class EasySEOBuilder extends React.Component {
         terms = _terms.splice(1, _terms.length-1),
         mainTerm = terms[0].label,
         _termsPontuation = response.G.Nf,
-        termsPontuation = _termsPontuation[_termsPontuation.length-2].c,
+        termsPontuation = _termsPontuation[_termsPontuation.length-1].c,
         termsList = [];
 
-    for (let i=1; i<=terms.length-1; i++) {
+    for (let i=0; i<=terms.length-1; i++) {
       termsList.push({
-        label: terms[i-1].label,
+        label: terms[i].label,
         value: termsPontuation[i].v
       });
     }
@@ -163,18 +174,6 @@ class EasySEOBuilder extends React.Component {
       main: mainTerm,
       all: termsList
     };
-  }
-
-  handleSingleTermQueryResponse (response) {
-    try {
-      this.state.terms.push(this.getTermsPontuationFromResponse(response));
-      this.setState({
-        terms: this.state.terms
-      });
-    }
-    catch (err) {
-      console.log(err);
-    }
   }
 
   buildTrendsApiUrl (terms) {

@@ -8,6 +8,7 @@ function EasySEO (options) {
 
 EasySEO.prototype.init = function (options) {
   this.fields = options.fields || [];
+  this.synonymsApiHost = options.synonymsApiHost;
   this.googleInit();
   this.build();
 };
@@ -34,7 +35,7 @@ EasySEO.prototype.insertContainer = function (field, id) {
 
 EasySEO.prototype.renderReactComponent = function (refer, id) {
   ReactDom.render(
-    <EasySEOBuilder refer={refer} />,
+    <EasySEOBuilder refer={refer} synonymsApiHost={this.synonymsApiHost}/>,
     document.getElementById(id));
 };
 
