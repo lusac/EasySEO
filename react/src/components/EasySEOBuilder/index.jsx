@@ -89,7 +89,6 @@ class EasySEOBuilder extends React.Component {
       }
     };
     xhttp.open('GET', this.synonymsApiHost + terms.join(), true);
-    // xhttp.setRequestHeader('Authorization', 'Bearer ' + '6N+3bqgPkdwj4CtN1c7ffbtTW3mdW4Lc1elLV9lrle5bJ0EQzYgOiPFejpRLWVpjK8SZ7dGG761OJ+TwhKd1hw==');
     xhttp.send();
   };
 
@@ -253,17 +252,17 @@ class EasySEOBuilder extends React.Component {
 
     // Add Click Events to refer
     this.refer.addEventListener('click', function (e) {
-      let clickX = e.clientX;
-      let clickY = e.clientY;
-      let highlights = document.getElementsByClassName('easyseo__el-highlight');
+      let clickX = e.clientX,
+          clickY = e.clientY,
+          highlights = document.getElementsByClassName('easyseo__el-highlight');
 
       for(let i=0; i<=highlights.length-1; i++) {
-        let el = highlights[i];
-        let rect = el.getBoundingClientRect();
+        let el = highlights[i],
+            rect = el.getBoundingClientRect();
 
         if (clickX >= rect.left && clickX <= rect.right) {
           if (clickY >= rect.top && clickY <= rect.bottom) {
-            self.showTooltip(el, {top: rect.bottom + 10, left: (rect.left + rect.right)/2});
+            self.showTooltip(el, {top: rect.bottom + window.window.scrollY + 10, left: (rect.left + rect.right)/2});
             break;
           }
         }
