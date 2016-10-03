@@ -155,7 +155,25 @@ class EasySEOBuilder extends React.Component {
         mainTerm = terms[0].label,
         _termsPontuation = response.G.Nf,
         termsPontuation = _termsPontuation[_termsPontuation.length-1].c,
-        termsList = [];
+        termsList;
+
+    try {
+      // try to get last pontuation
+      termsList = this.populateTermsList(terms, termsPontuation);
+    } catch (err) {
+      // get
+      termsPontuation = _termsPontuation[_termsPontuation.length-2].c;
+      termsList = this.populateTermsList(terms, termsPontuation);
+    }
+
+    return {
+      main: mainTerm,
+      all: termsList
+    };
+  }
+
+  populateTermsList (terms, termsPontuation) {
+    let termsList = [];
 
     for (let i=0; i<=terms.length-1; i++) {
       termsList.push({
@@ -169,10 +187,7 @@ class EasySEOBuilder extends React.Component {
       return b.value - a.value;
     });
 
-    return {
-      main: mainTerm,
-      all: termsList
-    };
+    return termsList;
   }
 
   buildTrendsApiUrl (terms) {
