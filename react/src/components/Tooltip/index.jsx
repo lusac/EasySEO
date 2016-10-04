@@ -15,30 +15,30 @@ class Tooltip extends React.Component {
 
   renderTerms () {
     if (this.props.params.terms.all) {
-      return (
-        <span>
-          {this.props.params.terms.all.map((term, i) => {
-            if (this.props.params.terms.main !== term.label ) {
-              return (
-                <span className='easyseo__tooltip-info-term'
-                  key={i}
-                  data-newterm={term.label}
-                  data-oldterm={this.props.params.terms.main}
-                  onClick={this.changeTerms.bind(this)}>
-                    <span className='main-term'>
-                      {this.props.params.terms.main}
-                    </span>
-                    <span className='other-term'>
-                      <ArrowRight />
-                      <ArrowReverse />
-                      <a>{term.label}</a>
-                    </span>
-                </span>
-              );
-            }
-          })}
-        </span>
-      )
+      let html = [],
+          terms = this.props.params.terms;
+
+      for (var i = 0; i < terms.all.length; i++) {
+        let term = terms.all[i];
+        if (terms.main == term.label) {
+          break;
+        }
+        html.push(<span className='easyseo__tooltip-info-term'
+          key={i}
+          data-newterm={term.label}
+          data-oldterm={terms.main}
+          onClick={this.changeTerms.bind(this)}>
+            <span className='main-term'>
+              {terms.main}
+            </span>
+            <span className='other-term'>
+              <ArrowRight />
+              <ArrowReverse />
+              <a>{term.label}</a>
+            </span>
+        </span>);
+      }
+      return html;
     }
   }
 
