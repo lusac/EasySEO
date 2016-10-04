@@ -52,7 +52,6 @@ class EasySEOBuilder extends React.Component {
       self.setState({
         sentence: this.value
       });
-      self.mirrorElement.style.height = this.style.height;
     });
 
     document.getElementsByTagName('html')[0].addEventListener('click', function(e) {
