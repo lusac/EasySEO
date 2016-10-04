@@ -176,15 +176,17 @@ class EasySEOBuilder extends React.Component {
       // try to get last pontuation
       termsList = this.populateTermsList(terms, termsPontuation.slice(1));
     } catch (err) {
-      // get
       termsPontuation = _termsPontuation[_termsPontuation.length-2].c;
       termsList = this.populateTermsList(terms, termsPontuation.slice(1));
     }
 
-    return {
-      main: mainTerm,
-      all: termsList
-    };
+    if (termsList[0].label !== mainTerm) {
+      return {
+        main: mainTerm,
+        all: termsList
+      };
+    }
+    return {}
   }
 
   populateTermsList (terms, termsPontuation) {
