@@ -106,10 +106,16 @@ class EasySEOBuilder extends React.Component {
   }
 
   getTopRelatedTerm (term) {
-    let url = this.getTrendsApiUrl(term);
+    if (sessionStorage[term] == undefined || sessionStorage[term].length == 0) {
+      let url = this.getTrendsApiUrl(term);
 
-    if (url) {
-      this.sendGoogleQuery(url);
+      if (url) {
+        sessionStorage[term] = [];
+        this.sendGoogleQuery(url);
+      }
+    } else {
+      console.log('Getting term from cache: ' + term);
+      this.updateTerms(JSON.parse(sessionStorage[term]));
     }
   }
 
@@ -134,19 +140,25 @@ class EasySEOBuilder extends React.Component {
 
   sendGoogleQuery (url) {
     let query = new google.visualization.Query(url);
-    query.send(this.handleSingleTermQueryResponse.bind(this));
+    query.send(this.handleSingleTermQueryResponse.bind(this))
   }
 
   handleSingleTermQueryResponse (response) {
     try {
-      this.state.terms.push(this.getTermsPontuationFromResponse(response));
-      this.setState({
-        terms: this.state.terms
-      });
+      let termsData = this.getTermsPontuationFromResponse(response);
+      this.updateTerms(termsData);
+      sessionStorage.setItem(termsData.main, JSON.stringify(termsData));
     }
     catch (err) {
       console.log(err);
     }
+  }
+
+  updateTerms (data) {
+    this.state.terms.push(data);
+    this.setState({
+      terms: this.state.terms
+    });
   }
 
   getTermsPontuationFromResponse (response) {
@@ -197,30 +209,14 @@ class EasySEOBuilder extends React.Component {
   getHighlightedSentence () {
     let resp = {__html:''};
     if (this.state.sentence.length > 0) {
-      let self = this,
-          changeList = [],
+      let changeList = [],
           sentenceTerms = this.state.sentence.split(' ');
 
-      for (var i=0; i <= this.state.terms.length-1; i++) {
+      for (var i=0; i < this.state.terms.length; i++) {
         changeList.push(this.state.terms[i].main);
       }
 
-      // return (
-      //   <span>
-      //     {sentenceTerms.map((term, i) => {
-      //       if (changeList.includes(term)) {
-      //         return (
-      //           <span className='easyseo__el-highlight' key={i}>{term}</span>
-      //         )
-      //       }
-      //       else {
-      //         return (<span key={i}> {term} </span>)
-      //       }
-      //     })};
-      //   </span>
-      // )
-
-      for (var i=0, len=sentenceTerms.length; i < len; i++) {
+      for (var i=0; i < sentenceTerms.length; i++) {
         if (changeList.includes(sentenceTerms[i])) {
           sentenceTerms[i] = ['<span class="easyseo__el-highlight">', sentenceTerms[i], '</span>'].join('');
         }
@@ -254,6 +250,15 @@ class EasySEOBuilder extends React.Component {
     });
   }
 
+  tooltipHandler (e) {
+    let newSentence = this.state.sentence.replace(e.currentTarget.dataset.oldterm, e.currentTarget.dataset.newterm);
+    this.setState({
+      sentence: newSentence
+    });
+    this.refer.value = newSentence;
+    this.refer.dispatchEvent(new Event('change'));
+  }
+
   componentDidMount () {
     let self = this;
 
@@ -283,15 +288,6 @@ class EasySEOBuilder extends React.Component {
         }
       }
     });
-  }
-
-  tooltipHandler (e) {
-    let newSentence = this.state.sentence.replace(e.currentTarget.dataset.oldterm, e.currentTarget.dataset.newterm);
-    this.setState({
-      sentence: newSentence
-    });
-    this.refer.value = newSentence;
-    this.refer.dispatchEvent(new Event('change'));
   }
 
   render () {
