@@ -65,7 +65,7 @@ class Tooltip extends React.Component {
   getGoogleTrendsUrl () {
     if (Object.keys(this.props.params.terms).length !== 0) {
       let terms = this.props.params.terms.all.map(item => item.label).join();
-      return 'https://www.google.com.br/trends/explore?q=' + terms;
+      return 'https://www.google.com.br/trends/explore?date=today%2012-m&geo=BR&q=' + terms;
     }
     return '#';
   }
