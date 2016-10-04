@@ -31,7 +31,7 @@ class Tooltip extends React.Component {
                     <span className='other-term'>
                       <ArrowRight />
                       <ArrowReverse />
-                      {term.label}
+                      <a>{term.label}</a>
                     </span>
                 </span>
               );

@@ -104,6 +104,10 @@ $opensans_regular: 'OpenSans Regular';
       .other-term {
         color: #fff;
         background-color: #0669de;
+
+        a {
+          color: #fff;
+        }
       }
 
       .easyseo__arrow-right {
@@ -128,7 +132,7 @@ $opensans_regular: 'OpenSans Regular';
       padding: 4px 14px;
       border-radius: 50px;
       display: inline-block;
-      font-family: OpenSans;
+      font-family: $opensans_regular;
       letter-spacing: -0.5px;
     }
 
