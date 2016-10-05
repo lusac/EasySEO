@@ -8,6 +8,7 @@ class Tooltip extends React.Component {
 
   constructor(props) {
     super(props);
+    this.props.params.order = this.props.params.order || {};
     this.props.params.isHidden = this.props.params.isHidden || true;
     this.props.params.terms = this.props.params.terms || {};
     this.props.params.pos = this.props.params.pos || {top: 0, left: 0};
@@ -51,7 +52,7 @@ class Tooltip extends React.Component {
   }
 
   changeTerms (e) {
-    this.props.params.tooltipHandler(e);
+    this.props.params.tooltipOnChangeHandler({'event': e, 'order': this.props.params.order});
     this.dispatchEvent('easyseoTermChanged', {'detail': e});
     this.closeHandler();
   }

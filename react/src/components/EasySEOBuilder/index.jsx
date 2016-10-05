@@ -38,7 +38,6 @@ class EasySEOBuilder extends React.Component {
   }
 
   emptyState () {
-    // this.state.sentence = ''; // need this?
     this.state.terms = [];
   }
 
@@ -223,7 +222,8 @@ class EasySEOBuilder extends React.Component {
   }
 
   getHighlightedSentence () {
-    let resp = {__html:''};
+    let self = this,
+        resp = {__html:''};
     if (this.state.sentence.length > 0) {
       let newSentence = this.state.sentence;
 
@@ -250,7 +250,8 @@ class EasySEOBuilder extends React.Component {
 
     this.setState({
       tooltip: {
-        tooltipHandler: this.tooltipHandler.bind(this),
+        order: this.indexInParent(el),
+        tooltipOnChangeHandler: this.tooltipOnChangeHandler.bind(this),
         isHidden: false,
         terms: tooltipTerm,
         pos: {
@@ -261,13 +262,27 @@ class EasySEOBuilder extends React.Component {
     });
   }
 
-  tooltipHandler (e) {
-    let newSentence = this.state.sentence.replace(e.currentTarget.dataset.oldterm, e.currentTarget.dataset.newterm);
+  tooltipOnChangeHandler (e) {
+    // TODO: refactor
+    let newHighlightRefer = this.refer.parentElement.querySelectorAll('.easyseo__el-highlight')[e.order],
+        mirrorElement = this.refer.parentNode.getElementsByClassName('easyseo__el-mirror')[0];
+    newHighlightRefer.textContent = e.event.currentTarget.dataset.newterm;
+
     this.setState({
-      sentence: newSentence
+      sentence: mirrorElement.textContent
     });
-    this.refer.value = newSentence;
+    this.refer.value = mirrorElement.textContent;
     this.refer.dispatchEvent(new Event('change'));
+  }
+
+  indexInParent(node) {
+    var children = node.parentNode.childNodes;
+    var num = 0;
+    for (var i=0; i<children.length; i++) {
+         if (children[i]==node) return num;
+         if (children[i].nodeType==1) num++;
+    }
+    return -1;
   }
 
   componentDidMount () {
