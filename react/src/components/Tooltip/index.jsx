@@ -52,6 +52,7 @@ class Tooltip extends React.Component {
 
   changeTerms (e) {
     this.props.params.tooltipHandler(e);
+    this.dispatchEvent('easyseoTermChanged', {'detail': e});
     this.closeHandler();
   }
 
@@ -68,6 +69,11 @@ class Tooltip extends React.Component {
       return 'https://www.google.com.br/trends/explore?date=today%2012-m&geo=BR&q=' + terms;
     }
     return '#';
+  }
+
+  dispatchEvent (name, args) {
+    var e = new CustomEvent(name, args);
+    document.dispatchEvent(e);
   }
 
   render () {
