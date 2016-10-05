@@ -101,7 +101,7 @@ class EasySEOBuilder extends React.Component {
   };
 
   getTopRelatedTermFromTerms (terms) {
-    for(let i=0; i<=terms.length-1; i++) {
+    for(let i = 0; i < terms.length; i++) {
       this.getTopRelatedTerm(terms[i]);
     }
   }
@@ -163,6 +163,12 @@ class EasySEOBuilder extends React.Component {
   }
 
   updateTerms (data) {
+    for (let i = 0; i < this.state.terms.length; i++) {
+      if (this.state.terms[i].main == data.main) {
+        return 0;
+      }
+    }
+
     this.state.terms.push(data);
     this.setState({
       terms: this.state.terms
@@ -197,7 +203,7 @@ class EasySEOBuilder extends React.Component {
   populateTermsList (terms, termsPontuation) {
     let termsList = [];
 
-    for (let i=0; i<=terms.length-1; i++) {
+    for (let i = 0; i < terms.length; i++) {
       termsList.push({
         label: terms[i].label,
         value: termsPontuation[i].v
@@ -221,7 +227,7 @@ class EasySEOBuilder extends React.Component {
     if (this.state.sentence.length > 0) {
       let newSentence = this.state.sentence;
 
-      for (var i=0; i < this.state.terms.length; i++) {
+      for (var i = 0; i < this.state.terms.length; i++) {
         let term = this.state.terms[i].main;
         newSentence = newSentence.replace(new RegExp('\\b' + term + '\\b', 'g'), '<span class="easyseo__el-highlight">' + term + '</span>');
       }
@@ -235,7 +241,7 @@ class EasySEOBuilder extends React.Component {
     let tooltipTerm,
         term = el.textContent;
 
-    for(let i=0; i<=this.state.terms.length-1; i++) {
+    for(let i = 0; i < this.state.terms.length; i++) {
       if (this.state.terms[i].main == term) {
         tooltipTerm = this.state.terms[i];
         break;
@@ -281,7 +287,7 @@ class EasySEOBuilder extends React.Component {
           clickY = e.clientY,
           highlights = document.getElementsByClassName('easyseo__el-highlight');
 
-      for(let i=0; i<=highlights.length-1; i++) {
+      for(let i = 0; i < highlights.length; i++) {
         let el = highlights[i],
             rect = el.getBoundingClientRect();
 
