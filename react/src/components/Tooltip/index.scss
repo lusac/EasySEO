@@ -19,7 +19,7 @@ $opensans_regular: 'OpenSans Regular';
 
 .easyseo__tooltip {
   z-index: 5;
-  width: 400px;
+  width: 435px;
   display: block;
   position: absolute;
   border-radius: 2px;
@@ -65,6 +65,7 @@ $opensans_regular: 'OpenSans Regular';
   &-subtitle {
     color: #999;
     font-size: 14px;
+    margin-top: 9px;
     line-height: 1.43;
     margin-bottom: 32px;
     letter-spacing: -0.3px;
@@ -75,7 +76,7 @@ $opensans_regular: 'OpenSans Regular';
     display: block;
     font-size: 16px;
     line-height: 1.5;
-    margin-bottom: 66px;
+    margin-bottom: 37px;
     letter-spacing: -0.5px;
 
     a {
