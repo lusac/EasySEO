@@ -38,14 +38,14 @@
     <input id="empty-title" type="text" name="empty-title">
     <br><br>
 
-    <!-- Other Field  -->
-    <label for="other-field">Other Field</label>
-    <input id="other-field" type="text" name="other-field">
-    <br><br>
-
     <!-- Fields With Content -->
     <label for="fields-with-content">Fields With Content</label>
     <input id="fields-with-content" type="text" name="fields-with-content" value="remover o make">
+    <br><br>
+
+    <!-- Textarea Field  -->
+    <label for="textarea-field">Textarea Field</label>
+    <textarea id="textarea-field" name="textarea-field" cols="105" rows="5">remover o make</textarea>
     <br><br>
   </div>
 
@@ -55,7 +55,7 @@
     window.easyseo = new EasySEO({
       fields: [
         document.getElementById('empty-title'),
-        document.getElementById('other-field'),
+        document.getElementById('textarea-field'),
         document.getElementById('fields-with-content')
       ]
     });

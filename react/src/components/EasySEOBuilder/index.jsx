@@ -38,7 +38,7 @@ class EasySEOBuilder extends React.Component {
   }
 
   emptyState () {
-    this.state.sentece = '';
+    // this.state.sentence = ''; // need this?
     this.state.terms = [];
   }
 
@@ -219,19 +219,14 @@ class EasySEOBuilder extends React.Component {
   getHighlightedSentence () {
     let resp = {__html:''};
     if (this.state.sentence.length > 0) {
-      let changeList = [],
-          sentenceTerms = this.state.sentence.split(' ');
+      let newSentence = this.state.sentence;
 
       for (var i=0; i < this.state.terms.length; i++) {
-        changeList.push(this.state.terms[i].main);
+        let term = this.state.terms[i].main;
+        newSentence = newSentence.replace(term, '<span class="easyseo__el-highlight">' + term + '</span>');
       }
 
-      for (var i=0; i < sentenceTerms.length; i++) {
-        if (changeList.includes(sentenceTerms[i])) {
-          sentenceTerms[i] = ['<span class="easyseo__el-highlight">', sentenceTerms[i], '</span>'].join('');
-        }
-      }
-      resp.__html = sentenceTerms.join(' ');
+      resp.__html = newSentence;
     }
     return resp;
   }
