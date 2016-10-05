@@ -32,11 +32,21 @@
 <body>
   <div id="content">
     <h1>EasySEO</h1>
-    <label for="title">Title</label>
-    <input id="title" type="text" name="title">
+
+    <!-- Empty Title -->
+    <label for="empty-title">Empty Title</label>
+    <input id="empty-title" type="text" name="empty-title">
     <br><br>
-    <label for="subtitle">Subtitle</label>
-    <input id="subtitle" type="text" name="subtitle">
+
+    <!-- Other Field  -->
+    <label for="other-field">Other Field</label>
+    <input id="other-field" type="text" name="other-field">
+    <br><br>
+
+    <!-- Fields With Content -->
+    <label for="fields-with-content">Fields With Content</label>
+    <input id="fields-with-content" type="text" name="fields-with-content" value="remover o make">
+    <br><br>
   </div>
 
   <script src="http://localhost:8080/static/bundle.js"></script>
@@ -44,8 +54,9 @@
   <script>
     window.easyseo = new EasySEO({
       fields: [
-        document.getElementById('title'),
-        document.getElementById('subtitle')
+        document.getElementById('empty-title'),
+        document.getElementById('other-field'),
+        document.getElementById('fields-with-content')
       ]
     });
     document.addEventListener('easyseoTermChanged', function(e) {
