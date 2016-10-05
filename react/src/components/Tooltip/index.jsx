@@ -88,7 +88,7 @@ class Tooltip extends React.Component {
       <span id='easyseo__tooltip' className='easyseo__tooltip' style={style}>
         <span className='easyseo__tooltip-close' onClick={this.closeHandler.bind(this)}>✕</span>
         <strong className='easyseo__tooltip-title'>Recomendação de SEO</strong>
-        <p className='easyseo__tooltip-subtitle'>Substitua as palavras para ganhar mais relevância no Google</p>
+        <p className='easyseo__tooltip-subtitle'>Substitua a palavra para ganhar mais relevância no Google</p>
         <span className='easyseo__tooltip-info'>
           {this.renderTerms()}
         </span>
