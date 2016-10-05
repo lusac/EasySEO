@@ -49,9 +49,14 @@ class EasySEOBuilder extends React.Component {
     });
 
     this.refer.addEventListener('keyup', function() {
+      let newTooltip = self.state.tooltip;
+      newTooltip.isHidden = true;
+
       self.setState({
-        sentence: this.value
+        sentence: this.value,
+        tooltip: newTooltip
       });
+
       if (self.mirrorElement.style.height != this.style.height) {
         self.mirrorElement.style.height = this.style.height;
       }
