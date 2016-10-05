@@ -223,7 +223,7 @@ class EasySEOBuilder extends React.Component {
 
       for (var i=0; i < this.state.terms.length; i++) {
         let term = this.state.terms[i].main;
-        newSentence = newSentence.replace(term, '<span class="easyseo__el-highlight">' + term + '</span>');
+        newSentence = newSentence.replace(new RegExp(term, 'g'), '<span class="easyseo__el-highlight">' + term + '</span>');
       }
 
       resp.__html = newSentence;
