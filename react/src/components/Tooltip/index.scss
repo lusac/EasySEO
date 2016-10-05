@@ -26,6 +26,7 @@ $opensans_regular: 'OpenSans Regular';
   background-color: #FFF;
   box-sizing: border-box;
   padding: 32px 32px 25px 24px;
+  -webkit-font-smoothing: antialiased;
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);
 
   &:after {
@@ -155,6 +156,10 @@ $opensans_regular: 'OpenSans Regular';
     line-height: 1.33;
     text-decoration: none;
     text-transform: uppercase;
+
+    &:hover {
+      color: #2445B1;
+    }
   }
 
   &-close {
@@ -165,5 +170,9 @@ $opensans_regular: 'OpenSans Regular';
     cursor: pointer;
     padding: 12px 14px;
     position: absolute;
+
+    &:hover {
+      color: #333;
+    }
   }
 }
