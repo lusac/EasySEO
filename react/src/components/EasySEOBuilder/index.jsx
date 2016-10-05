@@ -27,10 +27,6 @@ class EasySEOBuilder extends React.Component {
     this.iframeId = this.prefixClass + '-iframe';
     this.initSearchVars();
     this.bindEvents();
-
-    if (this.refer.value) {
-      this.searchTopRelated(this.refer);
-    }
 	}
 
   initSearchVars () {
@@ -297,6 +293,10 @@ class EasySEOBuilder extends React.Component {
         }
       }
     });
+
+    if (this.refer.value) {
+      this.searchTopRelated(this.refer);
+    }
   }
 
   render () {
