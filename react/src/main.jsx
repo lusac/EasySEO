@@ -34,9 +34,12 @@ EasySEO.prototype.insertContainer = function (field, id) {
 };
 
 EasySEO.prototype.renderReactComponent = function (refer, id) {
-  ReactDom.render(
-    <EasySEOBuilder refer={refer} synonymsApiHost={this.synonymsApiHost}/>,
-    document.getElementById(id));
+  var self = this;
+  setTimeout(function () {
+    ReactDom.render(
+      <EasySEOBuilder refer={refer} synonymsApiHost={self.synonymsApiHost}/>,
+      document.getElementById(id));
+  }, 500);
 };
 
 window.EasySEO = EasySEO;
