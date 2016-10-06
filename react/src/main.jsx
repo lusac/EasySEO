@@ -20,7 +20,7 @@ EasySEO.prototype.googleInit = function () {
 EasySEO.prototype.build = function () {
   for (var i=0; i <= this.fields.length - 1; i++) {
     let field = this.fields[i],
-        id = 'easyseo-id-' + field.name;
+        id = 'easyseo-id-' + this.getUUID();
 
     this.insertContainer(field, id);
     this.renderReactComponent(field, id);
@@ -41,5 +41,15 @@ EasySEO.prototype.renderReactComponent = function (refer, id) {
       document.getElementById(id));
   }, 500);
 };
+
+EasySEO.prototype.getUUID = function () {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
 
 window.EasySEO = EasySEO;
