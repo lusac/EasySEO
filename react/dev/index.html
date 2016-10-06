@@ -58,11 +58,11 @@
 
   <script>
     window.easyseo = new EasySEO({
-      fields: [
-        document.getElementById('empty-title'),
-        document.getElementById('textarea-field'),
-        document.getElementById('fields-with-content'),
-        document.getElementById('div-content-editable')
+      selectors: [
+        '#empty-title',
+        '#textarea-field',
+        '#fields-with-content',
+        '#div-content-editable'
       ]
     });
     document.addEventListener('easyseoTermChanged', function(e) {

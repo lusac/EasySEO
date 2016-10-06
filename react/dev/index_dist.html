@@ -34,22 +34,43 @@
 <body>
   <div id="content">
     <h1>EasySEO Dist Version</h1>
-    <label for="title">Title</label>
-    <input id="title" type="text" name="title">
+
+    <!-- Empty Title -->
+    <label for="empty-title">Empty Title</label>
+    <input id="empty-title" type="text" name="empty-title">
     <br><br>
-    <label for="subtitle">Subtitle</label>
-    <input id="subtitle" type="text" name="subtitle">
+
+    <!-- Fields With Content -->
+    <label for="fields-with-content">Fields With Content</label>
+    <input id="fields-with-content" type="text" name="fields-with-content" value="remover o make">
+    <br><br>
+
+    <!-- Textarea Field  -->
+    <label for="textarea-field">Textarea Field</label>
+    <textarea id="textarea-field" name="textarea-field" cols="105" rows="5">remover o make</textarea>
+    <br><br>
+
+    <!-- Div contentEditable  -->
+    <label for="div-content-editable">Div contentEditable</label>
+    <div id="div-content-editable" contenteditable="true">remover o make</div>
+    <br><br>
   </div>
 
   <script src="http://localhost:8080/dist/easyseo.js"></script>
 
   <script>
     window.easyseo = new EasySEO({
-      fields: [
-        document.getElementById('title'),
-        document.getElementById('subtitle')
+      selectors: [
+        '#empty-title',
+        '#textarea-field',
+        '#fields-with-content',
+        '#div-content-editable'
       ]
-    })
+    });
+
+    document.addEventListener('easyseoTermChanged', function(e) {
+      console.log('addEventListener: easyseoTermChanged!')
+    });
   </script>
 </body>
 </html>

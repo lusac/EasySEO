@@ -7,14 +7,25 @@ function EasySEO (options) {
 }
 
 EasySEO.prototype.init = function (options) {
-  this.fields = options.fields || [];
+  this.selectors = options.selectors || [];
   this.synonymsApiHost = options.synonymsApiHost;
+  this.fields = this.getFields();
   this.googleInit();
   this.build();
 };
 
 EasySEO.prototype.googleInit = function () {
   google.load('visualization', '1');
+};
+
+EasySEO.prototype.getFields = function () {
+  var elements = [];
+  this.selectors.map(function(s) {
+    Array.prototype.slice.call(document.querySelectorAll(s)).map(function(el) {
+      elements.push(el);
+    });
+  });
+  return elements;
 };
 
 EasySEO.prototype.build = function () {
