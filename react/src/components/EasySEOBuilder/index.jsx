@@ -31,9 +31,10 @@ class EasySEOBuilder extends React.Component {
 
   initSearchVars () {
     this.state = {
-      sentence: '',
       terms: [],
-      tooltip: {}
+      tooltip: {},
+      sentence: '',
+      lastSentence: ''
 		}
   }
 
@@ -43,7 +44,7 @@ class EasySEOBuilder extends React.Component {
 
   bindEvents () {
     let self = this;
-    this.refer.addEventListener('change', function() {
+    this.refer.addEventListener('blur', function() {
       self.searchTopRelated(this);
     });
 
@@ -75,9 +76,10 @@ class EasySEOBuilder extends React.Component {
   searchTopRelated (instance) {
     let value = instance.value || instance.textContent;
 
-    if (value) {
+    if (value && value !== this.state.lastSentence) {
       this.emptyState();
       this.state.sentence = value;
+      this.state.lastSentence = value;
 
       let terms = this.getTermsFromSentence(this.state.sentence);
       if (this.synonymsApiHost) {
