@@ -52,7 +52,7 @@ class EasySEOBuilder extends React.Component {
       newTooltip.isHidden = true;
 
       self.setState({
-        sentence: this.value,
+        sentence: this.value || this.textContent,
         tooltip: newTooltip
       });
 
@@ -73,9 +73,12 @@ class EasySEOBuilder extends React.Component {
   }
 
   searchTopRelated (instance) {
-    if (instance.value) {
+    let value = instance.value || instance.textContent;
+
+    if (value) {
       this.emptyState();
-      this.state.sentence = instance.value;
+      this.state.sentence = value;
+
       let terms = this.getTermsFromSentence(this.state.sentence);
       if (this.synonymsApiHost) {
         this.getSynonymsFromApi(terms)
@@ -224,6 +227,7 @@ class EasySEOBuilder extends React.Component {
   getHighlightedSentence () {
     let self = this,
         resp = {__html:''};
+
     if (this.state.sentence.length > 0) {
       let newSentence = this.state.sentence;
 
@@ -315,7 +319,7 @@ class EasySEOBuilder extends React.Component {
       }
     });
 
-    if (this.refer.value) {
+    if (this.refer.value || this.refer.textContent) {
       this.searchTopRelated(this.refer);
     }
   }
