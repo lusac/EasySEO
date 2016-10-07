@@ -18,6 +18,8 @@
     "babel-preset-react": "^6.5.0",
     "babel-register": "^6.9.0",
     "css-loader": "^0.23.1",
+    "grunt": "^1.0.1",
+    "grunt-bump": "0.0.17",
     "node-sass": "^3.8.0",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
@@ -26,5 +28,8 @@
     "style-loader": "^0.13.1",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
+  },
+  "publishConfig": {
+    "registry": "http://artifactory.globoi.com/artifactory/api/npm/npm-local"
   }
 }
